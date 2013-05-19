@@ -1,9 +1,10 @@
 #include "Compressor.h"
 
-Compressor::Compressor(char *data)
+Compressor::Compressor(const char *data)
 {
-    m_data = data;
     m_dataSize = strlen(data);
+    m_data = new char [m_dataSize];
+    strcpy(m_data, data);
     countLetters();
 }
 
@@ -13,11 +14,10 @@ void Compressor::encode()
     tree->out(cout);
     map< char, vector<bool> > table;
     tree->buildTable(*&table);
+
     for(int i=0; i<m_dataSize; i++){
-        char letter = m_data[i];
-        vector<bool> code = table[letter];
-        for(int j = 0; j<code.size(); j++){
-            cout<<code[j];
+        for(int j = 0; j<table[m_data[i]].size(); j++){
+            cout<<table[m_data[i]][j];
         }
     }
 }

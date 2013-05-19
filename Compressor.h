@@ -14,6 +14,6 @@ private:
     void countLetters();
     Node *buildTree();
 public:
-    Compressor(char *data);
+    Compressor(const char *data);
     void encode();
 };

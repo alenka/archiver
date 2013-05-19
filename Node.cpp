@@ -23,9 +23,9 @@ void Node::out(ostream &stream, int k = 50)
     for(int i = 0; i < k; i++) stream << " ";
 
     if(_letter){
-        stream <<"("<<_letter<<"["<<_count<<"])\n";
+        stream <<"("<<_letter<<"["<<_count<<"])"<<endl;
     }else{
-        stream <<"["<<_count<<"]\n";
+        stream <<"["<<_count<<"]"<<endl;
     }
 
     if(_left){
@@ -33,7 +33,7 @@ void Node::out(ostream &stream, int k = 50)
     }
 
     if(_right){
-        _right->out(stream, k+10);
+        _right->out(stream, k+5);
     }
 }
 
