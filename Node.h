@@ -1,8 +1,11 @@
 #include <iostream>
+#include <fstream>
 #include <map>
 #include <vector>
 
 using namespace std;
+
+typedef vector<bool> code;
 
 class Node
 {
@@ -13,6 +16,6 @@ public:
     Node(int count, char letter);
     Node(Node *left, Node *right);
     static bool compare(Node *left, Node *right);
-    void out(ostream &stream, int k);
-    void buildTable(map< char, vector<bool> > &table, vector<bool> code);
+    void out(ostream &stream, int k = 50)
+    void buildTable(map<char, code> &table, code _code);
 };

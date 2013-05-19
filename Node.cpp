@@ -37,18 +37,18 @@ void Node::out(ostream &stream, int k = 50)
     }
 }
 
-void Node::buildTable(map< char, vector<bool> > &table, vector<bool> code = vector<bool>())
+void Node::buildTable(map<char, code> &table, code _code = code())
 {
     if (_left){
-        code.push_back(0);
-        _left->buildTable(table, code);
+        _code.push_back(0);
+        _left->buildTable(table, _code);
     }
     if (_right){
-        code.push_back(1);
-        _right->buildTable(table, code);
+        _code.push_back(1);
+        _right->buildTable(table, _code);
     }
     if (_letter){
-        table[_letter] = code;
+        table[_letter] = _code;
     }
-    code.pop_back();
+    _code.pop_back();
 }

@@ -3,7 +3,7 @@
 
 int main()
 {
-    Compressor *c = new Compressor("boogieman boooo");
-    c->encode();
+    Compressor *c = new Compressor("boooobooooo");
+    c->compress("out.bin");
     return 0;
 }

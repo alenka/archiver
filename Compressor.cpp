@@ -8,18 +8,38 @@ Compressor::Compressor(const char *data)
     countLetters();
 }
 
-void Compressor::encode()
+void Compressor::compress(const char *filename)
 {
+    ofstream out(filename, ios::out | ios::binary);
+    if(!out)
+    {
+        throw new exception();
+    }
+
     Node *tree = buildTree();
-    tree->out(cout);
-    map< char, vector<bool> > table;
+    map<char, code> table;
     tree->buildTable(*&table);
 
-    for(int i=0; i<m_dataSize; i++){
-        for(int j = 0; j<table[m_data[i]].size(); j++){
-            cout<<table[m_data[i]][j];
+    char temp, buf = 0;
+    int i, j, count;
+    code _code;
+    for(i = 0; i<m_dataSize; i++)
+    {
+        temp = m_data[i];
+        _code = table[temp];
+        for(j = 0; j<_code.size(); j++)
+        {
+            buf |= _code[j] << (7 - count);
+            if(++count == 8)
+            {
+                count = 0;
+                out<<buf;
+                buf = 0;
+            }
         }
     }
+
+    out.close();
 }
 
 void Compressor::countLetters()
@@ -39,10 +59,13 @@ Node *Compressor::buildTree()
 {
     while(m_letters.size() != 1){
         m_letters.sort(Node::compare);
+
         Node *left = m_letters.front();
         m_letters.pop_front();
+
         Node *right = m_letters.front();
         m_letters.pop_front();
+
         m_letters.push_back(new Node(left, right));
     }
     return m_letters.front();

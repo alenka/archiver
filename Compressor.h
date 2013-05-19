@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <string.h>
 #include <list>
 #include "Node.cpp"
@@ -15,5 +16,5 @@ private:
     Node *buildTree();
 public:
     Compressor(const char *data);
-    void encode();
+    void compress(const char *filename);
 };
