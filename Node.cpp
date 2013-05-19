@@ -1,3 +1,5 @@
+#include "Node.h"
+
 Node::Node(int count, char letter)
 {
     _count = count;
@@ -11,7 +13,7 @@ Node::Node(Node *left, Node *right)
     _letter = NULL;
     _count = left->_count + right->_count;
 }
-static bool Node::compare(Node *left, Node *right)
+bool Node::compare(Node *left, Node *right)
 {
     return left->_count < right->_count;
 }
