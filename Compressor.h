@@ -8,11 +8,12 @@ using namespace std;
 class Compressor
 {
 private:
-    list<Node*> m_list;
+    list<Node*> m_letters;
     char *m_data;
     unsigned long m_dataSize;
-    void parseData();
+    void countLetters();
     Node *buildTree();
 public:
-    void encode(char *data);
+    Compressor(char *data);
+    void encode();
 };

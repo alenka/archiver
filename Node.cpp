@@ -18,17 +18,20 @@ bool Node::compare(Node *left, Node *right)
     return left->_count < right->_count;
 }
 
-void Node::out(ostream &stream, int k = 5)
+void Node::out(ostream &stream, int k = 50)
 {
-    if(_left){
-        _left->out(stream, k+5);
-    }
-    for(int i=0; i<k; i++) stream<<" ";
+    for(int i = 0; i < k; i++) stream << " ";
+
     if(_letter){
         stream <<"("<<_letter<<"["<<_count<<"])\n";
     }else{
         stream <<"["<<_count<<"]\n";
     }
+
+    if(_left){
+        _left->out(stream, k-5);
+    }
+
     if(_right){
         _right->out(stream, k+10);
     }

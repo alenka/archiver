@@ -1,10 +1,14 @@
 #include "Compressor.h"
 
-void Compressor::encode(char *data)
+Compressor::Compressor(char *data)
 {
     m_data = data;
     m_dataSize = strlen(data);
-    parseData();
+    countLetters();
+}
+
+void Compressor::encode()
+{
     Node *tree = buildTree();
     tree->out(cout);
     map< char, vector<bool> > table;
@@ -18,28 +22,28 @@ void Compressor::encode(char *data)
     }
 }
 
-void Compressor::parseData()
+void Compressor::countLetters()
 {
     map<char, int> lettersCount;
     for(int i = 0; i < m_dataSize; i++){
         lettersCount[m_data[i]]++;
     }
-    
+
     map<char, int>::iterator i;
     for (i = lettersCount.begin(); i != lettersCount.end(); i++) {
-        m_list.push_back( new Node(i->second, i->first) );
+        m_letters.push_back( new Node(i->second, i->first) );
     }
 }
 
 Node *Compressor::buildTree()
 {
-    while(m_list.size() != 1){
-        m_list.sort(Node::compare);
-        Node *left = m_list.front();
-        m_list.pop_front();
-        Node *right = m_list.front();
-        m_list.pop_front();
-        m_list.push_back(new Node(left, right));
+    while(m_letters.size() != 1){
+        m_letters.sort(Node::compare);
+        Node *left = m_letters.front();
+        m_letters.pop_front();
+        Node *right = m_letters.front();
+        m_letters.pop_front();
+        m_letters.push_back(new Node(left, right));
     }
-    return m_list.front();
+    return m_letters.front();
 }
