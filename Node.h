@@ -16,6 +16,6 @@ public:
     Node(int count, char letter);
     Node(Node *left, Node *right);
     static bool compare(Node *left, Node *right);
-    void out(ostream &stream, int k = 50)
+    void out(ostream &stream, int k);
     void buildTable(map<char, code> &table, code _code);
 };

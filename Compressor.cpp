@@ -1,21 +1,14 @@
 #include "Compressor.h"
 
-Compressor::Compressor(const char *data)
+Compressor::Compressor(const char *in, const char *out)
 {
-    m_dataSize = strlen(data);
-    m_data = new char [m_dataSize];
-    strcpy(m_data, data);
-    countLetters();
+    _in = ofstream(in, ios::in);
+    _out = ofstream(out, ios::out | ios::binary);
 }
 
-void Compressor::compress(const char *filename)
+void Compressor::compress()
 {
-    ofstream out(filename, ios::out | ios::binary);
-    if(!out)
-    {
-        throw new exception();
-    }
-
+    processLetters();
     Node *tree = buildTree();
     map<char, code> table;
     tree->buildTable(*&table);
@@ -42,15 +35,18 @@ void Compressor::compress(const char *filename)
     out.close();
 }
 
-void Compressor::countLetters()
+void Compressor::processLetters()
 {
-    map<char, int> lettersCount;
+    typedef map<char, int> lettersMap;
+
+    lettersMap letters;
     for(int i = 0; i < m_dataSize; i++){
-        lettersCount[m_data[i]]++;
+        letters[m_data[i]]++;
     }
 
-    map<char, int>::iterator i;
-    for (i = lettersCount.begin(); i != lettersCount.end(); i++) {
+    _out<<letters.size()<<endl;
+    for (lettersMap::iterator i = letters.begin(); i != letters.end(); i++) {
+        _out<<i->first<<i->second<<endl;
         m_letters.push_back( new Node(i->second, i->first) );
     }
 }
