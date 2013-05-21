@@ -1,20 +1,23 @@
 #include <iostream>
 #include <fstream>
-#include <string.h>
 #include <list>
 #include "Node.cpp"
 
 using namespace std;
 
+typedef map<char, int> lettersTable;
+
 class Compressor
 {
-private:
-    list<Node*> m_letters;
-    char *m_data;
-    unsigned long m_dataSize;
-    void countLetters();
-    Node *buildTree();
+protected:
+    ifstream _in;
+    lettersTable _letters;
+    Node *_lettersTree;
+    char *_fname;
+
+    void buildTree();
 public:
-    Compressor(const char *data);
-    void compress(const char *filename);
+    Compressor(const char *filename);
+    ~Compressor();
+    virtual bool run(const char *filename) =0;
 };

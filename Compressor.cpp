@@ -1,68 +1,36 @@
 #include "Compressor.h"
 
-Compressor::Compressor(const char *in, const char *out)
+Compressor::Compressor(const char *filename)
 {
-    _in = ofstream(in, ios::in);
-    _out = ofstream(out, ios::out | ios::binary);
+    _fname = new char [strlen(filename)];
+    strcpy(_fname, filename);
+    _in.open(filename, ios::in | ios::binary);
 }
 
-void Compressor::compress()
+Compressor::~Compressor()
 {
-    processLetters();
-    Node *tree = buildTree();
-    map<char, code> table;
-    tree->buildTable(*&table);
-
-    char temp, buf = 0;
-    int i, j, count;
-    code _code;
-    for(i = 0; i<m_dataSize; i++)
-    {
-        temp = m_data[i];
-        _code = table[temp];
-        for(j = 0; j<_code.size(); j++)
-        {
-            buf |= _code[j] << (7 - count);
-            if(++count == 8)
-            {
-                count = 0;
-                out<<buf;
-                buf = 0;
-            }
-        }
-    }
-
-    out.close();
+    _in.close();
 }
 
-void Compressor::processLetters()
+void Compressor::buildTree()
 {
-    typedef map<char, int> lettersMap;
+    list<Node*> tree;
 
-    lettersMap letters;
-    for(int i = 0; i < m_dataSize; i++){
-        letters[m_data[i]]++;
+    for (lettersTable::iterator i = _letters.begin(); i != _letters.end(); i++) {
+        tree.push_back( new Node(i->second, i->first) );
     }
 
-    _out<<letters.size()<<endl;
-    for (lettersMap::iterator i = letters.begin(); i != letters.end(); i++) {
-        _out<<i->first<<i->second<<endl;
-        m_letters.push_back( new Node(i->second, i->first) );
+    while(tree.size() != 1){
+        tree.sort(Node::compare);
+
+        Node *left = tree.front();
+        tree.pop_front();
+
+        Node *right = tree.front();
+        tree.pop_front();
+
+        tree.push_back(new Node(left, right));
     }
-}
 
-Node *Compressor::buildTree()
-{
-    while(m_letters.size() != 1){
-        m_letters.sort(Node::compare);
-
-        Node *left = m_letters.front();
-        m_letters.pop_front();
-
-        Node *right = m_letters.front();
-        m_letters.pop_front();
-
-        m_letters.push_back(new Node(left, right));
-    }
-    return m_letters.front();
+    _lettersTree = tree.front();
 }

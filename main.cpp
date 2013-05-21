@@ -1,9 +1,15 @@
 #include <iostream>
-#include "Compressor.cpp"
+#include "Archiver.cpp"
+
+using namespace std;
+
+void printBool(const bool a)
+{
+    cout << endl << (a ? "true" : "false") << endl;
+}
 
 int main()
 {
-    Compressor *c = new Compressor("Alena super star!!!");
-    c->compress("out.bin");
-    return 0;
+    Archiver arch("test.txt");
+    // printBool(arch.do("out.bin"));
 }

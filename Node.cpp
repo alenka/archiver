@@ -37,7 +37,15 @@ void Node::out(ostream &stream, int k = 50)
     }
 }
 
-void Node::buildTable(map<char, code> &table, code _code = code())
+codeMap Node::getTable()
+{
+    codeMap map;
+    buildTable(*&map, code());
+
+    return map;
+}
+
+void Node::buildTable(codeMap &table, code _code)
 {
     if (_left){
         _code.push_back(0);
