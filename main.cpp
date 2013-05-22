@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Archiver.cpp"
+#include "src/Archiver.cpp"
 
 using namespace std;
 
@@ -10,6 +10,6 @@ void printBool(const bool a)
 
 int main()
 {
-    Archiver arch("test.txt");
-    // printBool(arch.do("out.bin"));
+    Archiver arch("resources/test.txt");
+    arch.run("resources/out.bin");
 }
