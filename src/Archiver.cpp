@@ -2,7 +2,6 @@
 
 Archiver::Archiver(const char *filename) : Compressor(filename){}
 
-
 void Archiver::dumpLetters(ostream &out)
 {
     out<<_letters.size();
@@ -10,7 +9,6 @@ void Archiver::dumpLetters(ostream &out)
     {
         out << i->first << i->second;
     }
-    out<<endl;
 }
 
 void Archiver::processLetters()
