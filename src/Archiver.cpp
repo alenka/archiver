@@ -16,11 +16,11 @@ void Archiver::processLetters()
     char letter;
     while(!_in.eof())
     {
-        _in.get(letter);
+        letter = _in.get();
         _letters[letter]++;
     }
-    _in.close();
-    _in.open(_fname);
+    _in.clear();
+    _in.seekg(0);
 }
 
 bool Archiver::run(const char *filename)
@@ -29,25 +29,27 @@ bool Archiver::run(const char *filename)
     buildTree();
     codeMap table = _lettersTree->getTable();
 
-    ofstream out(filename, ios::out);
+    ofstream out(filename, ios::out | ios::binary);
     if(!out)
     {
         return false;
     }
 
-    dumpLetters(out);
+    // dumpLetters(out);
+
     char letter, buf = NULL;
     int i, count = 0, codeSize;
     code _code;
     while(!_in.eof())
     {
-        _in.get(letter);
+        letter = _in.get();
         _code = table[letter];
         codeSize = _code.size();
         for(i = 0; i < codeSize; i++)
         {
-            buf |= _code[i] << (7 - count);
-            if(++count == 8)
+            buf = buf | _code[i] << (7 - count);
+            count++;
+            if(count == 8)
             {
                 out<<buf;
                 count = 0;

@@ -60,3 +60,18 @@ void Node::buildTable(codeMap &table, code _code)
     }
     _code.pop_back();
 }
+
+char Node::getLetter()
+{
+    return _letter;
+}
+
+Node *Node::getChild(bool isRight)
+{
+    return isRight ? _right : _left;
+}
+
+bool Node::isLast()
+{
+    return (_right == NULL && _left == NULL);
+}

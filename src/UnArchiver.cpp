@@ -16,10 +16,11 @@ bool UnArchiver::run(const char *filename)
     Node *parent = _lettersTree;
     int count = 0;
     char byte = _in.get();
+    bool bit;
     while(!_in.eof())
     {
-        bool b = byte & (1 << (7-count) );
-        parent = b ? parent->getRight() : parent->getLeft();
+        bit = byte & (1 << (7-count) );
+        parent = parent->getChild(bit);
         if(parent->isLast())
         {
             out << parent->getLetter();

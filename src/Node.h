@@ -22,23 +22,7 @@ public:
     static bool compare(Node *left, Node *right);
     void out(ostream &stream, int k);
     codeMap getTable();
-    char getLetter()
-    {
-        return _letter;
-    }
-
-    Node *getLeft()
-    {
-        return _left;
-    }
-
-    Node *getRight()
-    {
-        return _right;
-    }
-
-    bool isLast()
-    {
-        return (_right == NULL && _left == NULL);
-    }
+    bool isLast();
+    char getLetter();
+    Node *getChild(bool isRight);
 };
