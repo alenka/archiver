@@ -1,23 +1,35 @@
 #include <iostream>
-#include <fstream>
+#include <vector>
+#include <map>
 #include <list>
+#include <fstream>
 #include "Node.cpp"
 
 using namespace std;
 
-typedef map<char, int> lettersTable;
+typedef map<char, int> CharMap;
+typedef vector<bool> Code;
+typedef map<char, Code> CodeTable;
 
 class Compressor
 {
+private:
+    void buildCharMap();
+    void buildCharTree();
+    void buildCodeTable(Node *root);
+    
+    void dumpCharMap(ostream &out);
+    void loadCharMap(istream &in);
 protected:
-    ifstream _in;
-    lettersTable _letters;
-    Node *_lettersTree;
-    char *_fname;
-
-    void buildTree();
+    Code code;
+    CodeTable codeTable;
+    CharMap charMap;
+    Node *charTree;
+    
+    ifstream inputFile;
 public:
     Compressor(const char *filename);
     ~Compressor();
-    virtual bool run(const char *filename) =0;
+    void compress(const char *filename);
+    void decompress(const char *filename);
 };

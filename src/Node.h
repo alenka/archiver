@@ -1,28 +1,23 @@
 #include <iostream>
-#include <fstream>
-#include <map>
-#include <vector>
-
-using namespace std;
-
-typedef vector<bool> code;
-typedef map<char, code> codeMap;
 
 class Node
 {
-protected:
-    Node *_left, *_right;
-    int _count;
-    char _letter;
 private:
-    void buildTable(codeMap &table, code _code);
+    int count;
+    char letter;
+    Node *left, *right;
 public:
-    Node(int count, char letter);
-    Node(Node *left, Node *right);
-    static bool compare(Node *left, Node *right);
-    void out(ostream &stream, int k);
-    codeMap getTable();
-    bool isLast();
+    Node(Node *_left, Node *_right);
+    
+    Node(int _count, char _letter);
+    
+    static bool compare(const Node* l, const Node* r);
+    
+    bool hasChild();
+    
+    int getCount();
+    
     char getLetter();
-    Node *getChild(bool isRight);
+    
+    Node *getChild(bool isLeft);
 };

@@ -1,77 +1,40 @@
 #include "Node.h"
 
-Node::Node(int count, char letter)
+Node::Node(Node *_left, Node *_right)
 {
-    _count = count;
-    _letter = letter;
-    _left = _right = NULL;
-}
-Node::Node(Node *left, Node *right)
-{
-    _left = left;
-    _right = right;
-    _letter = NULL;
-    _count = left->_count + right->_count;
-}
-bool Node::compare(Node *left, Node *right)
-{
-    return left->_count < right->_count;
+    left =  _left;
+    right = _right;
+    count = left->count + right->count;
 }
 
-void Node::out(ostream &stream, int k = 50)
+Node::Node(int _count, char _letter)
 {
-    for(int i = 0; i < k; i++) stream << " ";
-
-    if(_letter){
-        stream <<"("<<_letter<<"["<<_count<<"])"<<endl;
-    }else{
-        stream <<"["<<_count<<"]"<<endl;
-    }
-
-    if(_left){
-        _left->out(stream, k-5);
-    }
-
-    if(_right){
-        _right->out(stream, k+5);
-    }
+    left = right = NULL;
+    count = _count;
+    letter = _letter;
 }
 
-codeMap Node::getTable()
+bool Node::compare(const Node* l, const Node* r)
 {
-    codeMap map;
-    buildTable(*&map, code());
-
-    return map;
+    return l->count < r->count;
 }
 
-void Node::buildTable(codeMap &table, code _code)
+bool Node::hasChild()
 {
-    if (_left){
-        _code.push_back(0);
-        _left->buildTable(table, _code);
-    }
-    if (_right){
-        _code.push_back(1);
-        _right->buildTable(table, _code);
-    }
-    if (_letter){
-        table[_letter] = _code;
-    }
-    _code.pop_back();
+    return (left && right);
+}
+
+int Node::getCount()
+{
+    return count;
 }
 
 char Node::getLetter()
 {
-    return _letter;
+    return letter;
 }
 
-Node *Node::getChild(bool isRight)
+Node *Node::getChild(bool isLeft)
 {
-    return isRight ? _right : _left;
-}
-
-bool Node::isLast()
-{
-    return (_right == NULL && _left == NULL);
+    return isLeft ? left : right;
 }

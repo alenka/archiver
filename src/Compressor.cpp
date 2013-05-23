@@ -2,35 +2,149 @@
 
 Compressor::Compressor(const char *filename)
 {
-    _fname = new char [strlen(filename)];
-    strcpy(_fname, filename);
-    _in.open(filename, ios::in | ios::binary);
+    inputFile.open(filename, ios::in);
 }
 
 Compressor::~Compressor()
 {
-    _in.close();
+    inputFile.close();
 }
 
-void Compressor::buildTree()
+void Compressor::dumpCharMap(ostream &out)
+{
+    out << charMap.size() << endl;
+    for(CharMap::iterator i = charMap.begin(); i != charMap.end(); i++)
+    {
+        out << i->first << endl << i->second << endl;
+    }
+}
+
+void Compressor::loadCharMap(istream &in)
+{
+    int size, i, count;
+    char letter;
+    in >> size;
+    for(i = 0; i < size; i++)
+    {
+        letter = in.get();
+        in >> count;
+        charMap[letter] = count;
+        printf("%hhd : %i\n", letter, count);
+    }
+}
+
+void Compressor::buildCharMap()
+{
+    while (!inputFile.eof())
+    {
+        charMap[inputFile.get()]++;
+    }
+    // back poiner to start
+    inputFile.clear();
+    inputFile.seekg(0);
+}
+
+void Compressor::buildCharTree()
 {
     list<Node*> tree;
-
-    for (lettersTable::iterator i = _letters.begin(); i != _letters.end(); i++) {
-        tree.push_back( new Node(i->second, i->first) );
+    
+    for(CharMap::iterator i = charMap.begin(); i != charMap.end(); i++)
+    {
+        tree.push_back(new Node(i->second, i->first));
     }
-
-    while(tree.size() != 1){
+    
+    while (tree.size()!=1)
+    {
         tree.sort(Node::compare);
-
+        
         Node *left = tree.front();
         tree.pop_front();
-
         Node *right = tree.front();
         tree.pop_front();
-
+        
         tree.push_back(new Node(left, right));
     }
+    
+    charTree = tree.front();
+}
 
-    _lettersTree = tree.front();
+void Compressor::buildCodeTable(Node *root)
+{
+    Node *left = root->getChild(true),
+    *right = root->getChild(false);
+    
+    if (left)
+    {
+        code.push_back(0);
+        buildCodeTable(left);
+    }
+    
+    if (right)
+    {
+        code.push_back(1);
+        buildCodeTable(right);
+    }
+    
+    char letter = root->getLetter();
+    if (letter)
+    {
+        codeTable[letter] = code;
+    }
+    
+    code.pop_back();
+}
+
+void Compressor::compress(const char *filename)
+{
+    buildCharMap();
+    buildCharTree();
+    buildCodeTable(charTree);
+    
+    ofstream out(filename, ios::out | ios::binary);
+    
+    dumpCharMap(out);
+    int count = 0, codeSize, i;
+    char buf = 0;
+    while (!inputFile.eof())
+    {
+        Code code = codeTable[inputFile.get()];
+        codeSize = (int) code.size();
+        for(i = 0; i < codeSize; i++)
+        {
+            buf |= code[i] << (7 - count);
+            if (++count == 8)
+            {
+                out << buf;
+                count = buf = NULL;
+            }
+        }
+    }
+    out.close();
+}
+
+void Compressor::decompress(const char *filename)
+{
+    ofstream out(filename, ios::out | ios::binary);
+    
+    loadCharMap(inputFile);
+//    buildCharTree();
+//    
+//    Node *parent = charTree;
+//    int count = 0;
+//    char byte = inputFile.get();
+//    while(!inputFile.eof())
+//    {
+//        parent = parent->getChild(!(byte & 1 << 7 - count));
+//        if (!parent->hasChild())
+//        {
+//            out << parent->getLetter();
+//            parent = charTree;
+//        }
+//        count++;
+//        if (count==8) {
+//            count = 0;
+//            byte = inputFile.get();
+//        }
+//    }
+//    out.close();
 }
