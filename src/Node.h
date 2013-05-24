@@ -9,6 +9,7 @@ private:
 public:
     Node(Node *_left, Node *_right);
     Node(int _count, char _letter);
+    ~Node();
     static bool compare(const Node* l, const Node* r);
     bool hasChild();
     int getCount();

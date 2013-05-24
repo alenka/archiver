@@ -8,6 +8,7 @@ Compressor::Compressor(const char *filename)
 Compressor::~Compressor()
 {
     inputFile.close();
+    delete charTree;
 }
 
 void Compressor::dumpCharMap(ostream &out)

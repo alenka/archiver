@@ -7,6 +7,18 @@ Node::Node(Node *_left, Node *_right)
     count = left->count + right->count;
 }
 
+Node::~Node()
+{
+    if(left)
+    {
+        delete left;
+    }
+    if(right)
+    {
+        delete right;
+    }
+}
+
 Node::Node(int _count, char _letter)
 {
     left = right = NULL;
