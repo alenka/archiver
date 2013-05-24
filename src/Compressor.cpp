@@ -122,6 +122,7 @@ void Compressor::compress(const char *filename)
             }
         }
     }
+    out << buf;
     out.close();
 }
 
