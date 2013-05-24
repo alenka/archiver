@@ -123,7 +123,9 @@ void Compressor::compress(const char *filename)
             }
         }
     }
-    out << buf;
+    if(count > 0) {
+        out << buf;
+    }
     out.close();
 }
 
