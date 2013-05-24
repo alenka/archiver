@@ -29,6 +29,7 @@ void Compressor::loadCharMap(istream &in)
     {
         letter = in.get();
         in >> count;
+        log << letter << " : " << count << endl;
         charMap[letter] = count;
     }
 }
@@ -74,28 +75,18 @@ void Compressor::buildCharTree()
 
 void Compressor::buildCodeTable(Node *root)
 {
-    Node *left = root->getChild(true),
-    *right = root->getChild(false);
-
-    if (left)
+    if (root->hasChild())
     {
         code.push_back(0);
-        buildCodeTable(left);
-    }
+        buildCodeTable(root->getChild(true));
+        code.pop_back();
 
-    if (right)
-    {
         code.push_back(1);
-        buildCodeTable(right);
+        buildCodeTable(root->getChild(false));
+        code.pop_back();
+    } else {
+        codeTable[root->getLetter()] = code;
     }
-
-    char letter = root->getLetter();
-    if (letter)
-    {
-        codeTable[letter] = code;
-    }
-
-    code.pop_back();
 }
 
 void Compressor::compress(const char *filename)
@@ -139,18 +130,18 @@ void Compressor::decompress(const char *filename)
     Node *parent = charTree;
     int count = 0;
     char byte = inputFile.get();
-    while(!inputFile.fail())
-    {
-        parent = parent->getChild(!(byte & 1 << 7 - count));
-        if (!parent->hasChild())
-        {
-            out << parent->getLetter();
-            parent = charTree;
-        }
-        if (++count == 8) {
-            count = 0;
-            byte = inputFile.get();
-        }
-    }
+    // while(!inputFile.eof())
+    // {
+    //     parent = parent->getChild(!(byte & 1 << 7 - count));
+    //     if (!parent->hasChild())
+    //     {
+    //         out << parent->getLetter();
+    //         parent = charTree;
+    //     }
+    //     if (++count == 8) {
+    //         count = 0;
+    //         byte = inputFile.get();
+    //     }
+    // }
     out.close();
 }
