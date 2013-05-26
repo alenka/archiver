@@ -33,11 +33,7 @@ void Compressor::loadCharMap(istream &in)
 
 void Compressor::buildCharMap()
 {
-    inputFile.seekg (0, inputFile.end);
-    int length = inputFile.tellg();
-    inputFile.seekg (0, inputFile.beg);
-
-    while (length--)
+    while (!inputFile.eof())
     {
         charMap[inputFile.get()]++;
     }
