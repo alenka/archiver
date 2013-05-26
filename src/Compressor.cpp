@@ -13,21 +13,19 @@ Compressor::~Compressor()
 
 void Compressor::dumpCharMap(ostream &out)
 {
-    out << charMap.size();
     for(CharMap::iterator i = charMap.begin(); i != charMap.end(); i++)
     {
         out << i->first << i->second;
     }
+    out << LAST_SYMBOL;
 }
 
 void Compressor::loadCharMap(istream &in)
 {
-    int size, i, count;
+    int count;
     char letter;
-    in >> size;
-    for(i = 0; i < size; i++)
+    for(char letter = in.get(); letter != LAST_SYMBOL; letter = in.get())
     {
-        letter = in.get();
         in >> count;
         charMap[letter] = count;
     }

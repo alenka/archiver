@@ -5,6 +5,8 @@
 #include <fstream>
 #include "Node.cpp"
 
+#define LAST_SYMBOL (char)256
+
 using namespace std;
 
 typedef map<char, int> CharMap;
@@ -17,7 +19,7 @@ private:
     void buildCharMap();
     void buildCharTree();
     void buildCodeTable(Node *root);
-    
+
     void dumpCharMap(ostream &out);
     void loadCharMap(istream &in);
 protected:
@@ -25,7 +27,7 @@ protected:
     CodeTable codeTable;
     CharMap charMap;
     Node *charTree;
-    
+
     ifstream inputFile;
 public:
     Compressor(const char *filename);
