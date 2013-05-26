@@ -29,7 +29,6 @@ void Compressor::loadCharMap(istream &in)
     {
         letter = in.get();
         in >> count;
-        log << letter << " : " << count << endl;
         charMap[letter] = count;
     }
 }
@@ -130,18 +129,18 @@ void Compressor::decompress(const char *filename)
     Node *parent = charTree;
     int count = 0;
     char byte = inputFile.get();
-    // while(!inputFile.eof())
-    // {
-    //     parent = parent->getChild(!(byte & 1 << 7 - count));
-    //     if (!parent->hasChild())
-    //     {
-    //         out << parent->getLetter();
-    //         parent = charTree;
-    //     }
-    //     if (++count == 8) {
-    //         count = 0;
-    //         byte = inputFile.get();
-    //     }
-    // }
+    while(!inputFile.eof())
+    {
+        parent = parent->getChild(!(byte & 1 << 7 - count));
+        if (!parent->hasChild())
+        {
+            out << parent->getLetter();
+            parent = charTree;
+        }
+        if (++count == 8) {
+            count = 0;
+            byte = inputFile.get();
+        }
+    }
     out.close();
 }
